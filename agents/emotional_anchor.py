@@ -5,7 +5,6 @@ class EmotionalAnchorAI:
     def __init__(self):
         self.conversation_history = []
         self.user_mood_patterns = {}
-        self.adk_agent = EmotionalAnchorADK()
 
         # Emotional support responses for different moods
         self.support_responses = {
@@ -141,20 +140,13 @@ class EmotionalAnchorAI:
         # Log this conversation
         self._log_conversation(user_message, emotional_state)
 
-        # Use ADK agent for response generation
-        import asyncio
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        try:
-            adk_response = loop.run_until_complete(self.adk_agent.get_response(user_message))
-            return adk_response
-        except Exception as e:
-            # Fallback to original responses if ADK fails
-            if emotional_state in self.support_responses:
-                response = random.choice(self.support_responses[emotional_state])
-            else:
-                response = random.choice(self.support_responses['neutral'])
-            return response
+        # Simple response selection based on emotional state
+        if emotional_state in self.support_responses:
+            response = random.choice(self.support_responses[emotional_state])
+        else:
+            response = random.choice(self.support_responses['neutral'])
+
+        return response
 
     def _log_conversation(self, user_message, emotional_state):
         """Store conversation for emotional pattern tracking"""
