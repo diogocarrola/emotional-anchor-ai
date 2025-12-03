@@ -1,15 +1,26 @@
 # Emotional Anchor AI ⚓🩵
+*A learning project from Kaggle's 5-Day AI Agents Intensive Course*
 
-An AI companion that provides emotional stability and support through life's ups and downs. Your always-available friend for good days and bad days.
+## 🎯 About This Project
+This is my capstone project for the AI Agents course. As a beginner in AI agents, I focused on building something meaningful that I could actually complete: an emotional support companion that detects feelings and offers kind responses.
 
-## 🌟 What is Emotional Anchor AI?
+## 📖 My Learning Journey
+I started with zero experience in Google ADK and learned:
+- How emotional detection works (with negation handling!)
+- The basics of agent architecture
+- Session management with conversation memory
+- Where I struggled and what I'd do differently
 
-Emotional Anchor AI is not just another chatbot - it's a compassionate companion designed to:
-- Provide emotional support during difficult times
-- Celebrate joyful moments with you
-- Remember your emotional patterns
-- Offer consistent, non-judgmental presence
-- Be your steady anchor in emotional storms
+## 🔧 What's Working
+- ✅ Emotional detection with negation awareness ("not happy" → sad)
+- ✅ Conversation memory and pattern tracking
+- ✅ Simple, kind responses for different emotions
+- ✅ Clean, runnable code structure
+
+## 🚧 What I'm Still Learning
+- Fully integrating Google ADK (I have a minimal example)
+- Using Gemini models effectively in multi-agent systems
+- Advanced agent orchestration
 
 ## 🚀 Quick Start
 
