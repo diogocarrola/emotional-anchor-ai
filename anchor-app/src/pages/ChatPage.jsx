@@ -49,26 +49,43 @@ export default function ChatPage() {
       await addConversation(user.id, input, 'user', mood)
       setInput('')
 
-      // Simulate Anchor response (will be replaced with actual LLM integration)
-      setTimeout(async () => {
-        const responses = {
-          sad: "I'm here with you. These feelings are temporary, even though they feel heavy right now.",
-          happy: "I'm so glad you're experiencing joy! These moments are precious.",
-          anxious: "Let's breathe together. You're safe, and I'm right here.",
-          grateful: "Your gratitude is beautiful. It anchors you in what truly matters.",
-          neutral: "I'm listening. What's on your mind today?",
-        }
+      const { data: sessionData } = await supabase.auth.getSession()
+      const accessToken = sessionData.session?.access_token
 
-        await addConversation(
-          user.id,
-          responses[mood] || responses.neutral,
-          'anchor',
-          'supportive'
-        )
-        setSending(false)
-      }, 800)
+      const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/anchor-respond`
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: input,
+          userId: user.id,
+        }),
+      })
+
+      const result = await response.json()
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to get response from Anchor')
+      }
+
+      await addConversation(
+        user.id,
+        result.response,
+        'anchor',
+        result.mood || 'supportive'
+      )
     } catch (error) {
       console.error('Error sending message:', error)
+      await addConversation(
+        user.id,
+        "I'm having trouble connecting right now. Please try again in a moment.",
+        'anchor',
+        'neutral'
+      )
+    } finally {
       setSending(false)
     }
   }
