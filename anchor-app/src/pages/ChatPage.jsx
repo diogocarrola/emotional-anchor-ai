@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react'
 import { useAuthStore, useChatStore } from '../lib/store'
 import { supabase } from '../lib/supabase'
 import ChatMessage from '../components/ChatMessage'
+import SaveMemory from '../components/SaveMemory'
 import '../styles/ChatPage.css'
 
 export default function ChatPage() {
@@ -11,6 +12,7 @@ export default function ChatPage() {
   const [sending, setSending] = useState(false)
   const messagesEndRef = useRef(null)
   const [showMenu, setShowMenu] = useState(false)
+  const [showMemoryModal, setShowMemoryModal] = useState(false)
 
   useEffect(() => {
     if (user) {
@@ -95,6 +97,11 @@ export default function ChatPage() {
     setShowMenu(false)
   }
 
+  const handleOpenMemoryModal = () => {
+    setShowMemoryModal(true)
+    setShowMenu(false)
+  }
+
   return (
     <div className="chat-container">
       <div className="chat-header">
@@ -109,6 +116,9 @@ export default function ChatPage() {
           </button>
           {showMenu && (
             <div className="dropdown-menu">
+              <button onClick={handleOpenMemoryModal} className="menu-item">
+                Save Memory
+              </button>
               <button onClick={handleSignOut} className="menu-item">
                 Sign Out
               </button>
@@ -144,6 +154,13 @@ export default function ChatPage() {
           {sending ? '⟳' : 'Send'}
         </button>
       </form>
+
+      <SaveMemory
+        isOpen={showMemoryModal}
+        onClose={() => setShowMemoryModal(false)}
+        conversations={conversations}
+        user={user}
+      />
     </div>
   )
 }
